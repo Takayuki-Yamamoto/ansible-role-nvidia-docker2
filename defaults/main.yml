@@ -1,2 +1,3 @@
 ---
 # defaults file for ansible-role-nvidia-docker2
+apt_key_url: https://nvidia.github.io/nvidia-docker/gpgkey

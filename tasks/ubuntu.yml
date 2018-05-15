@@ -1,0 +1,27 @@
+---
+# task file for ubuntu.yml
+- name: version check
+  fail: msg="{{ ansible_distribution_version }} is not supported."
+  when: not (ansible_distribution_version == "14.04" or ansible_distribution_version == "16.04" or ansible_distribution_version == "18.04")
+
+- name: nvidia-docker2 release key is registered.
+  apt_key: url="{{ apt_key_url }}" state=present
+
+- name: software-properties-common is installed for prerequisite for apt_repository ansible module
+  apt: name=software-properties-common state=present
+
+- name: nvidia-docker2 apt repository is registered
+  apt_repository:
+    repo: "{{ item }}"
+    filename: nvidia-docker
+    state: present
+    mode: 0644
+    update_cache: "{{ 'yes' if not ansible_check_mode | bool else 'no' }}"
+  with_items:
+    - "deb https://nvidia.github.io/libnvidia-container/ubuntu{{ ansible_distribution_version }}/amd64 /"
+    - "deb https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ansible_distribution_version}}/amd64 /"
+    - "deb https://nvidia.github.io/nvidia-docker/ubuntu{{ ansible_distribution_version }}/amd64 /"
+
+- name: Install nvidia-docker2
+  apt: name=nvidia-docker2 state=present
+  notify: restart docker
