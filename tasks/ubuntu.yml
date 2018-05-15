@@ -5,3 +5,15 @@
 
 - name: software-properties-common is installed for prerequisite for apt_repository ansible module
   apt: name=software-properties-common state=present
+
+- name: nvidia-docker2 apt repository is registered
+  apt_repository:
+    repo: "{{ item }}"
+    filename: nvidia-docker
+    state: present
+    mode: 0644
+    update_cache: "{{ 'yes' if not ansible_check_mode | bool else 'no' }}"
+  with_items:
+    - "deb https://nvidia.github.io/libnvidia-container/ubuntu{{ ansible_distribution_version }}/amd64 /"
+    - "deb https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ansible_distribution_version}}/amd64 /"
+    - "deb https://nvidia.github.io/nvidia-docker/ubuntu{{ ansible_distribution_version }}/amd64 /"
