@@ -1,5 +1,9 @@
 ---
 # task file for ubuntu.yml
+- name: version check
+  fail: msg="{{ ansible_distribution_version }} is not supported."
+  when: not (ansible_distribution_version == "14.04" or ansible_distribution_version == "16.04" or ansible_distribution_version == "18.04")
+
 - name: nvidia-docker2 release key is registered.
   apt_key: url="{{ apt_key_url }}" state=present
 
