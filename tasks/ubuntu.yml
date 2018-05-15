@@ -1,0 +1,4 @@
+---
+# task file for ubuntu.yml
+- name: nvidia-docker2 release key is registered.
+  apt_key: url="{{ apt_key_url }}" state=present
