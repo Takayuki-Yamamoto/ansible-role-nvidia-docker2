@@ -17,3 +17,7 @@
     - "deb https://nvidia.github.io/libnvidia-container/ubuntu{{ ansible_distribution_version }}/amd64 /"
     - "deb https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ansible_distribution_version}}/amd64 /"
     - "deb https://nvidia.github.io/nvidia-docker/ubuntu{{ ansible_distribution_version }}/amd64 /"
+
+- name: Install nvidia-docker2
+  apt: name=nvidia-docker2 state=present
+  notify: restart docker
